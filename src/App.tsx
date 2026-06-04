@@ -1,36 +1,45 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider, useAuth } from './context/AuthContext'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import ResetPassword from './pages/ResetPassword'
-import Dashboard from './pages/Dashboard'
-import Admin from './pages/Admin'
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import Navigation from '@/components/layout/Navigation';
+import Footer from '@/components/layout/Footer';
+import ParticleBackground from '@/components/effects/ParticleBackground';
+import Toast from '@/components/ui-custom/Toast';
+import Landing from '@/pages/Landing';
+import Auth from '@/pages/Auth';
+import Dashboard from '@/pages/Dashboard';
+import Gallery from '@/pages/Gallery';
+import Profile from '@/pages/Profile';
 
-function AdminGuard({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isAdmin } = useAuth();
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (!isAdmin) return <Navigate to="/dashboard" replace />;
-  return <>{children}</>;
-}
-
-function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth();
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-  return <>{children}</>;
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
 }
 
 export default function App() {
+  const location = useLocation();
+  const isDashboard = location.pathname === '/dashboard';
+  const isAuth = location.pathname === '/auth';
+
   return (
-    <AuthProvider>
+    <div className="min-h-screen bg-dark-base text-white">
+      <ParticleBackground />
+      <ScrollToTop />
+      <Toast />
+
+      {!isDashboard && <Navigation />}
+
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/dashboard" element={<AuthGuard><Dashboard /></AuthGuard>} />
-        <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
-    </AuthProvider>
-  )
+
+      {!isDashboard && !isAuth && <Footer />}
+    </div>
+  );
 }

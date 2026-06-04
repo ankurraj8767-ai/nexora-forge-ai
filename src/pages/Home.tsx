@@ -1,29 +1,20 @@
-import Navigation from '../sections/Navigation';
-import Hero from '../sections/Hero';
-import TrustedBy from '../sections/TrustedBy';
-import Showcase from '../sections/Showcase';
-import ToolsSection from '../sections/ToolsSection';
-import ParallaxSection from '../sections/ParallaxSection';
-import HowSection from '../sections/HowSection';
-import GallerySection from '../sections/GallerySection';
-import Pricing from '../sections/Pricing';
-import CTA from '../sections/CTA';
-import Footer from '../sections/Footer';
+import { useState } from 'react'
+import '../App.css'
 
 export default function Home() {
+  const [count, setCount] = useState(0)
+
   return (
-    <div className="relative" style={{ background: '#000' }}>
-      <Navigation />
-      <Hero />
-      <TrustedBy />
-      <Showcase />
-      <ToolsSection />
-      <ParallaxSection />
-      <HowSection />
-      <GallerySection />
-      <Pricing />
-      <CTA />
-      <Footer />
-    </div>
-  );
+    <>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+    </>
+  )
 }
